@@ -1,26 +1,14 @@
+import sys
+from random import choice
+
+'''Bot Imports'''
+import os
 import discord
 
-client = discord.Client()
 
-@client.event
-async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
-
-client.run('your token here')
 
 
 """A Markov chain generator that can tweet random messages."""
-
-import sys
-from random import choice
 
 
 def open_and_read_file(filenames):
@@ -84,3 +72,19 @@ text = open_and_read_file(filenames)
 # Get a Markov chain
 chains = make_chains(text)
 
+#create an instance of a Client object. This client is our connection to Discord
+client = discord.Client()
+
+@client.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(client))
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if message.content.startswith('Whats up'):
+        await message.channel.send(make_text(chains))
+
+client.run(os.environ['DISCORD_TOKEN'])
